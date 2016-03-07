@@ -8,19 +8,19 @@ enum ShaderType { VERTEX_SHADER, FRAGMENT_SHADER };
 
 struct ShaderId
 {
-	GLuint id;
+    GLuint id;
 };
 
 struct ShaderData
 {
-	std::string source;
-	ShaderType type;
+    std::string source;
+    ShaderType type;
 };
 
 class ShaderManager : public h2d::ResourceManager<ShaderId, std::string, ShaderData>
 {
 protected:
-	virtual ShaderId* loadResource(const ShaderData& data);
+    virtual ShaderId* loadResource(const ShaderData& data);
 };
 
 #endif

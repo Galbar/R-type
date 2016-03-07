@@ -2,7 +2,7 @@
 
 Shader::Shader()
 {
-	p_program = glCreateProgram();
+    p_program = glCreateProgram();
 }
 
 Shader::~Shader()
@@ -10,38 +10,38 @@ Shader::~Shader()
 
 void Shader::addShader(ShaderId* shader)
 {
-	glAttachShader(p_program, shader->id);
+    glAttachShader(p_program, shader->id);
 }
 
 void Shader::link()
 {
-	glLinkProgram(p_program);
-	p_model_matrix = glGetUniformLocation(p_program, "ModelMatrix");
-	p_view_matrix = glGetUniformLocation(p_program, "ViewMatrix");
-	p_projection_matrix = glGetUniformLocation(p_program, "ProjectionMatrix");
+    glLinkProgram(p_program);
+    p_model_matrix = glGetUniformLocation(p_program, "ModelMatrix");
+    p_view_matrix = glGetUniformLocation(p_program, "ViewMatrix");
+    p_projection_matrix = glGetUniformLocation(p_program, "ProjectionMatrix");
 }
 
 void Shader::bind() const
 {
-	glUseProgram(p_program);
+    glUseProgram(p_program);
 }
 
-Gluint Shader::programId() const
+GLuint Shader::programId() const
 {
-	return p_program;
+    return p_program;
 }
 
-GLuint modelMatrixLocation() const
+GLuint Shader::modelMatrixLocation() const
 {
-	return p_model_matrix;
+    return p_model_matrix;
 }
 
-GLuint viewMatrixLocation() const
+GLuint Shader::viewMatrixLocation() const
 {
-	return p_view_matrix;
+    return p_view_matrix;
 }
 
-GLuint projectionMatrixLocation() const
+GLuint Shader::projectionMatrixLocation() const
 {
-	return p_projection_matrix;
+    return p_projection_matrix;
 }
