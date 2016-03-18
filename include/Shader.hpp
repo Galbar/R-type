@@ -32,6 +32,4 @@ private:
     std::string p_error_log;
 
 };
-
-
 #endif
