@@ -1,17 +1,16 @@
 CC = g++
-CFLAGS = -Wall -std=c++11 -O3 -v
+CFLAGS = -Wall -std=c++11 -O3
 ODIR   := obj
 SDIR   := src
-INC    := -Iinclude -I../Hum2D/include -I../glm -I/opt/local/include/ -L/opt/local/lib/
+INC    := -Iinclude -I../Hum2D/include -I../glm -I/opt/local/include/ -I../tiled/include
+LIBS   := -L/opt/local/lib/ -lsfml-audio -lsfml-window -lsfml-system -lGL -lGLEW
+STATIC := ../Hum2D/lib/libhum2d.a ../tiled/lib/libtiled.a
 
 SOURCES = $(shell find ./$(SDIR) -name '*.cpp')
 OBJS = $(patsubst $(SDIR)/%,$(ODIR)/%,$(SOURCES:./%.cpp=%.o))
 
 all: main.cpp $(OBJS)
-	$(CC) -o game main.cpp $(ODIR)/*.o $(CFLAGS) $(INC) ../Hum2D/lib/libhum2d.a -lsfml-audio -lsfml-window -lsfml-system -lGLEW
-
-lib: $(OBJS)
-
+	$(CC) -o game main.cpp $(OBJS) $(CFLAGS) $(INC) $(STATIC) $(LIBS)
 
 $(ODIR)/%.o: $(SDIR)/%.cpp
 	$(CC) -c $(INC) -o $@ $< $(CFLAGS)

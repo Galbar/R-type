@@ -13,6 +13,7 @@ cd /root/folder/
 
 # Clone necessary repos
 git clone https://github.com/Galbar/Hummingbird2D.git Hum2D
+git clone https://github.com/Galbar/tiled-map.git tiled
 git clone https://github.com/g-truc/glm.git
 git clone https://github.com/xaviermariaconejo/R-type.git
 
