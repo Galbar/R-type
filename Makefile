@@ -2,7 +2,7 @@ CC = g++
 CFLAGS = -Wall -std=c++11 -O3
 ODIR   := obj
 SDIR   := src
-INC    := -Iinclude -I../Hum2D/include -I../glm -I/opt/local/include/ -I../tiled/include
+INC    := -Iinclude -I../Hum2D/include -I../MOGL/include -I../glm -I/opt/local/include/ -I../tiled/include
 LIBS   := -L/opt/local/lib/ -lsfml-audio -lsfml-window -lsfml-system -lGL -lGLEW
 STATIC := ../Hum2D/lib/libhum2d.a ../tiled/lib/libtiled.a
 
