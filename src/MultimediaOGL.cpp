@@ -2,7 +2,9 @@
 
 MultimediaOGL::MultimediaOGL(sf::VideoMode mode, const sf::String& title, sf::Uint32 style, const sf::ContextSettings& settings):
 p_window(new sf::Window(mode, title, style, settings))
-{}
+{
+    glewInit();
+}
 
 MultimediaOGL::~MultimediaOGL()
 {
@@ -24,9 +26,11 @@ void MultimediaOGL::preFixedUpdate()
 
 void MultimediaOGL::postUpdate()
 {
+    glClearColor(0, 0, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     for (auto it : p_shader_program_usage)
     {
+        it.first->use();
         it.first->setUniformMatrix4f("projection", p_projection);
     }
 
@@ -34,15 +38,28 @@ void MultimediaOGL::postUpdate()
     {
         h2d_assert(drawable->shaderProgram() != nullptr, "Found a drawable without a shader program");
 
+        //drawable->shaderProgram()->use();
+        //drawable->shaderProgram()->setUniformMatrix4f("projection", p_projection);
         glm::mat4 model(1.0);
-        model = glm::translate(model, glm::vec3(drawable->transform().x, drawable->transform().y, drawable->transform().z));
-        model = glm::rotate(model, glm::radians(static_cast<float>(drawable->transform().rotation)), glm::vec3(0., 0., 1.));
-        model = glm::scale(model, glm::vec3(drawable->transform().scale_x, drawable->transform().scale_y, 1.));
+        model = glm::translate(model, glm::vec3(
+                    drawable->transform().x + drawable->actor().transform().x,
+                    drawable->transform().y + drawable->actor().transform().y,
+                    drawable->transform().z + drawable->actor().transform().z));
+        model = glm::rotate(model,
+                glm::radians(static_cast<float>(
+                        drawable->transform().rotation + drawable->actor().transform().rotation
+                        )),
+                glm::vec3(0., 0., 1.));
+        model = glm::scale(model, glm::vec3(
+                    drawable->transform().scale_x * drawable->actor().transform().scale_x,
+                    drawable->transform().scale_y * drawable->actor().transform().scale_y,
+                    1.));
         model = p_view * model;
         drawable->shaderProgram()->setUniformMatrix4f("modelview", model);
         drawable->draw();
     }
     glBindVertexArray(0);
+    p_window->display();
 }
 
 sf::Window* MultimediaOGL::window()
