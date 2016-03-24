@@ -13,12 +13,6 @@ public:
     p_tex(texture)
     {}
 
-    virtual ~rect ()
-    {
-        glDeleteBuffers(1, &p_VBO);
-        delete p_shader_program;
-    }
-
     void init() override
     {
         Shader v_shader, f_shader;
@@ -37,12 +31,10 @@ public:
                 << std::endl
                 << p_shader_program->log());
 
-        float x = p_width/2;
-        float y = p_height/2;
-        //float vert[12] = {-x, -y, -x, y, x, y,
-        //                  -x, -y,  x, y, x, -y};
-        float vert[12] = {-x, -y, x, y, -x, y,
-                          -x, -y,  x, -y, x, y};
+        float x = 20/2;
+        float y = 20/2;
+        float vert[12] = {-x, -y, -x, y, x, y,
+                          -x, -y,  x, y, x, -y};
 
         glGenVertexArrays(1, &p_VAO);
         glBindVertexArray(p_VAO);
@@ -50,7 +42,15 @@ public:
         glBindBuffer(GL_ARRAY_BUFFER, p_VBO);
         glBufferData(GL_ARRAY_BUFFER, 12 * sizeof(float), vert, GL_STATIC_DRAW);
         p_position_loc = p_shader_program->bindVertexAttribute("position", 2, 0, 0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindVertexArray(0);
         Drawable::init();
+    }
+
+    void onDestroy() override
+    {
+        glDeleteBuffers(1, &p_VBO);
+        delete p_shader_program;
     }
 
     virtual void draw() override
@@ -59,10 +59,7 @@ public:
         sf::Texture::bind(p_tex);
         glBindVertexArray(p_VAO);
         glEnableVertexAttribArray(p_position_loc);
-        h2d_log_d("hai");
         glDrawArrays(GL_TRIANGLES, 0, 6);
-        h2d_log_d("hai2");
-        sf::Texture::bind(NULL);
         glDisable(GL_TEXTURE_2D);
     }
 
@@ -78,18 +75,18 @@ int main(void)
     sf::ContextSettings settings;
     settings.majorVersion = 3;
     settings.minorVersion = 3;
-    MultimediaOGL* mogl = g.addPlugin<MultimediaOGL>(sf::VideoMode(600, 600), "Test", sf::Style::Default, settings);
-    g.addPlugin<h2d::KinematicWorld>();
-    h2d::Actor* a = g.makeActor();
     sf::Texture tex;
     tex.loadFromFile("warrior_cat.jpg");
+    MultimediaOGL* mogl = g.addPlugin<MultimediaOGL>(sf::VideoMode(600, 600), "Test", sf::Style::Default, settings);
+    g.addPlugin<h2d::KinematicWorld>();
+    mogl->setProjection(glm::ortho(-40.f, 40.f, -40.f, 40.f, 0.1f, 100.f));
+    mogl->setView(glm::lookAt(glm::vec3(0, 0, 1), glm::vec3(0, 0, -1), glm::vec3(0, 1, 0)));
+    h2d::Actor* a = g.makeActor();
     a->addBehavior<rect>(20, 20, &tex);
     auto k = a->addBehavior<h2d::Kinematic>();
     k->velocity().x = 5;
     k->velocity().y = 5;
     k->velocity().rotation = 45;
-    mogl->setProjection(glm::ortho(-40.f, 40.f, -40.f, 40.f, 0.1f, 100.f));
-    mogl->setView(glm::lookAt(glm::vec3(0, 0, 1), glm::vec3(0, 0, -1), glm::vec3(0, 1, 0)));
     g.run();
     return 0;
 }
