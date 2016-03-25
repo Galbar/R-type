@@ -1,6 +1,23 @@
-#include <limits>
 #include "Hum2D/Hum2D.hpp"
 #include "MOGL/MOGL.hpp"
+
+class OnMouse : public h2d::Behavior
+{
+public:
+    void init() override
+    {
+        p_input = &actor().game().getPlugin<mogl::MultimediaOGL>()->input();
+    }
+
+    void fixedUpdate() override
+    {
+        actor().transform().x = (p_input->getMouseCurrentPosition().x) * (80./600.) - 40;
+        actor().transform().y = -(p_input->getMouseCurrentPosition().y) * (80./600.) + 40;
+    }
+
+private:
+    mogl::InputHandler* p_input;
+};
 
 int main(void)
 {
@@ -58,6 +75,7 @@ int main(void)
     a->transform().x = 30;
     a->transform().y = 30;
     k = a->addBehavior<h2d::Kinematic>();
+    a->addBehavior<OnMouse>();
     //k->velocity().x = 1.25;
     //k->velocity().y = 1.25;
     //k->velocity().rotation = 10;
