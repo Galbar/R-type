@@ -9,8 +9,8 @@ STATIC := ../Hum2D/lib/libhum2d.a ../MOGL/lib/libmogl.a ../tiled/lib/libtiled.a
 SOURCES = $(shell find ./$(SDIR) -name '*.cpp')
 OBJS = $(patsubst $(SDIR)/%,$(ODIR)/%,$(SOURCES:./%.cpp=%.o))
 
-all: main.cpp $(OBJS)
-	$(CC) -o game main.cpp $(OBJS) $(CFLAGS) $(INC) $(STATIC) $(LIBS)
+all: $(OBJS)
+	$(CC) -o game $(OBJS) $(CFLAGS) $(INC) $(STATIC) $(LIBS)
 
 test: test.cpp $(OBJS)
 	$(CC) -o test test.cpp $(OBJS) $(CFLAGS) $(INC) $(STATIC) $(LIBS)
