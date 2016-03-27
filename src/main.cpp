@@ -1,5 +1,6 @@
 #include "Hum2D/Hum2D.hpp"
 #include "MOGL/MOGL.hpp"
+#include "ActorFactory.hpp"
 
 class OnMouse : public h2d::Behavior
 {
@@ -19,9 +20,41 @@ private:
     mogl::InputHandler* p_input;
 };
 
+class Test : public ActorConstructor
+{
+public:
+    Test()
+    {
+        tex.loadFromFile("./sprites.png");
+        animation = mogl::SpriteAnimation {
+            &tex,
+            0, 0, 0, 0, 48, 48,
+            {0, 1, 2, 3, 5, 6, 7, 8},
+            std::vector<h2d::Time>(8, h2d::Time::milliseconds(300))
+        };
+    }
+
+    void construct(h2d::Actor& actor, const tiled::Object& object) override
+    {
+        actor.transform().z = 15;
+        auto anim = actor.addBehavior<mogl::AnimatedSprite>(20, 20, &animation);
+        anim->setOrigin(glm::vec3(10, 10, 0));
+        //auto k = actor.addBehavior<h2d::Kinematic>();
+        actor.addBehavior<OnMouse>();
+        //k->velocity().x = 1.25;
+        //k->velocity().y = 1.25;
+        //k->velocity().rotation = 10;
+    }
+
+private:
+    sf::Texture tex;
+    mogl::SpriteAnimation animation;
+};
+
 int main(void)
 {
     h2d::Game g(60);
+
     sf::ContextSettings settings;
     settings.antialiasingLevel = 2;
     settings.depthBits = 24;
@@ -29,8 +62,12 @@ int main(void)
     settings.minorVersion = 3;
     sf::Texture tex;
     tex.loadFromFile("./warrior_cat.jpg");
-    sf::Texture tex2;
-    tex2.loadFromFile("./sprites.png");
+
+    ActorFactory factory;
+    factory.set<Test>("uno");
+
+
+
     mogl::MultimediaOGL* mogl = g.addPlugin<mogl::MultimediaOGL>(sf::VideoMode(600, 600), "Test", sf::Style::Default, settings);
     g.addPlugin<h2d::KinematicWorld>();
     //mogl->getCamera().setPerspective(100.f, 1.f);
@@ -81,20 +118,7 @@ int main(void)
     //k->velocity().y = 1.25;
     //k->velocity().rotation = 10;
     a = g.makeActor();
-    mogl::SpriteAnimation animation {
-        &tex2,
-        0, 0, 0, 0, 48, 48,
-        {0, 1, 2, 3, 5, 6, 7, 8},
-        std::vector<h2d::Time>(8, h2d::Time::milliseconds(300))
-    };
-    a->transform().z = 15;
-    auto anim = a->addBehavior<mogl::AnimatedSprite>(20, 20, &animation);
-    anim->setOrigin(glm::vec3(10, 10, 0));
-    k = a->addBehavior<h2d::Kinematic>();
-    a->addBehavior<OnMouse>();
-    //k->velocity().x = 1.25;
-    //k->velocity().y = 1.25;
-    //k->velocity().rotation = 10;
+    factory.build("uno", *a, tiled::Object());
     g.run();
     return 0;
 }
