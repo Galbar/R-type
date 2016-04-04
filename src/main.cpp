@@ -4,6 +4,8 @@ int main(void)
 {
     h2d::Game game(60);
     game.addPlugin<h2d::KinematicWorld>();
+    ActorFactory factory;
+    factory.set<PlayerBuilder>("Player");
 
     sf::ContextSettings settings;
     settings.antialiasingLevel = 2;
@@ -20,11 +22,25 @@ int main(void)
 
     game.addPlugin<GamePlugin>()->setCameraSpeed(0.5);
 
+    mogl->textures().load("sprites", "./sprites.png");
+
     auto a = game.makeActor();
-    auto rect = a->addBehavior<mogl::Rectangle>(1,1,sf::Color::Red);
-    rect = a->addBehavior<mogl::Rectangle>(1,1,sf::Color::Green);
-    rect = a->addBehavior<mogl::Rectangle>(1,1,sf::Color::Blue);
-    rect = a->addBehavior<mogl::Rectangle>(1,1,sf::Color::White);
+    mogl::SpriteAnimation anim {
+        mogl->textures().get("sprites"),
+        0, 0, 0, 0, 48, 48,
+        {0,1,2,3,5,6,7,8},
+        std::vector<h2d::Time>(8, h2d::Time::milliseconds(300))
+    };
+
+    mogl->spriteAnimations().load("player_anim", anim);
+
+    factory.build("Player", *a, tiled::Object());
+
+    a = game.makeActor();
+    a->addBehavior<mogl::Rectangle>(2, 2, sf::Color::Red);
+    a->addBehavior<Collider>(2, 2, Collider::Type::Wall);
+    a->transform().x = 10;
+    a->transform().y = 10;
 
     game.run();
     return 0;

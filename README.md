@@ -16,10 +16,14 @@ git clone https://github.com/Galbar/Hummingbird2D.git Hum2D
 git clone https://github.com/Galbar/tiled-map.git tiled
 git clone https://github.com/Galbar/Hummingbird2D-MOGL.git MOGL
 git clone https://github.com/g-truc/glm.git
+git clone --branch 5.3.2 https://github.com/lua/lua.git
 git clone https://github.com/xaviermariaconejo/R-type.git
 
 # Compile framework
 cd Hum2D
+make
+
+cd ../lua
 make
 
 cd ../tiled
