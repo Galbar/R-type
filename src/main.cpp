@@ -1,5 +1,23 @@
 #include "main.hpp"
 
+class Test : public h2d::Behavior
+{
+public:
+
+void fixedUpdate() override
+{
+
+    mogl::MultimediaOGL* p_mogl;
+    p_mogl = actor().game().getPlugin<mogl::MultimediaOGL>();
+    if(p_mogl->input().isKeyDown(sf::Keyboard::Up))
+    {
+        auto bullet = actor().game().makeActor();
+        bullet->addBehavior<Bird>();
+        actor().game().getPlugin<GamePlugin>()->addActor(bullet);
+    }
+}
+};
+
 int main(void)
 {
     h2d::Game game(60);
@@ -41,6 +59,9 @@ int main(void)
     a->addBehavior<Collider>(2, 2, Collider::Type::Wall);
     a->transform().x = 10;
     a->transform().y = 10;
+
+    a = game.makeActor();
+    a->addBehavior<Test>();
 
     game.run();
     return 0;

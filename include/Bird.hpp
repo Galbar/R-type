@@ -17,7 +17,6 @@ public:
     Bird(mogl::AnimatedSprite* sprite, Collider* collider, h2d::Kinematic* kinematic);
     void init() override;
     void fixedUpdate() override;
-    void onDestroy() override;
 
 private:
     mogl::MultimediaOGL* p_mogl;
@@ -26,7 +25,9 @@ private:
     h2d::Kinematic* p_kinematic;
     GamePlugin* p_game_pl;
 
-    bool p_shooting, p_circle;
+    void shoot();
+
+    bool p_circle;
     int p_num_bullets;
     float p_angle;
     h2d::Clock p_clk;

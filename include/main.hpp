@@ -8,5 +8,6 @@
 #include "Collider.hpp"
 #include "Player.hpp"
 #include "Defines.hpp"
+#include "Bird.hpp"
 
 #endif /* ifndef MAIN_HPP */

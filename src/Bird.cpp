@@ -1,5 +1,7 @@
 #include "Bird.hpp"
 #include "Collider.hpp"
+#include "Bullet.hpp"
+#include "Defines.hpp"
 
 void BirdBuilder::construct(h2d::Actor& actor, const tiled::Object& tmx_object)
 {
@@ -32,82 +34,68 @@ void Bird::init()
 void Bird::fixedUpdate()
 {
     Collision collision;
-    while (p_collider->getNextCollision(collision) && !p_sprite->isEnabled())
+    while (p_collider->getNextCollision(collision))
     {
         if (collision.other->getType() == Collider::Type::PlayerBullet)
         {
-            /*
-            p_sprite->enable();
-            p_collider->onDeactivate();
-            p_kinematic->velocity().x = 0;
-            p_kinematic->velocity().y = 0;
-            */
             actor().game().destroy(actor());
+            return;
         }
     }
 
-    if (!p_sprite->isEnabled())
+
+    p_kinematic->velocity().x = p_game_pl->getCameraSpeed();
+    p_kinematic->velocity().y = 0.0;
+
+    double pos_x = actor().transform().x;
+    double pos_y = actor().transform().y;
+    double width = p_mogl->getCamera().getPosition().x + ORTHO_WIDTH;
+    double height = p_mogl->getCamera().getPosition().y;
+    if (pos_x > width - ORTHO_WIDTH/6)
     {
-        p_kinematic->velocity().x = p_game_pl->getCameraSpeed();
-        p_kinematic->velocity().y = 0.0;
-
-        if (p_shooting && p_clk.reset().asSeconds() > 0.5)
+        p_kinematic->velocity().x -= 5;
+    }
+    else if (pos_x > width - 2*ORTHO_WIDTH/6  && p_num_bullets == 3)
+    {
+        shoot();
+        p_shooting = true;
+        p_clk.reset();
+    }
+    else if (p_num_bullets > 0 && p_clk.getTime().asSeconds() > 0.5)
+    {
+        shoot();
+        p_clk.reset();
+        if (p_num_bullets == 0)
         {
-            auto bullet = actor().game().makeActor();
-            bullet->addBehavior<Bullet>();
-            --p_num_bullets;
-            if (p_num_bullets == 0)
-            {
-                p_shooting = false;
-                p_num_bullets = 3;
-                p_circle = true;
-            }
+            p_circle = true;
         }
+    }
+    else if (p_circle)
+    {
+        float angle_stepsize = 0.1;
 
-        if (p_circle)
-        {
-            float angle_stepsize = 0.1;
+        p_kinematic->velocity().x *= cos(p_angle);
+        p_kinematic->velocity().y *= sin(p_angle);
 
-            p_kinematic->velocity().x *= cos(p_angle);
-            p_kinematic->velocity().y *= sin(p_angle);
+        p_angle += angle_stepsize;
 
-            p_angle += angle_stepsize;
-
-            if (p_angle < (3*3.14)/4)
-            {
-                p_circle = false;
-            }
-        }
-
-        double pos = actor().transform().x;
-        if (pos < 0.0)//limite
+        if (p_angle < (3*3.14)/4)
         {
-            /*
-            p_sprite->enable();
-            p_collider->onDeactivate();
-            p_kinematic->velocity().x = 0;
-            p_kinematic->velocity().y = 0;
-            */
-            actor().game().destroy(actor());
+            p_circle = false;
         }
-        else if (pos > 10.0)//limite
-        {
-            p_kinematic->velocity().x -= 5;
-        }
-        else if (pos == 9.0 && !p_shooting)
-        {
-            auto bullet = actor().game().makeActor();
-            bullet->addBehavior<Bullet>();
-            --p_num_bullets;
-            p_shooting = true;
-            p_clk.reset();
-        }
-        else if (actor().transform().y < 5.0)
-        {
-            p_kinematic->velocity().x -= 5;
-        }
+    }
+    else
+    {
+        p_kinematic->velocity().x -= 5;
     }
 }
 
-void Bird::onDestroy()
-{}
+void Bird::shoot()
+{
+    auto bullet = actor().game().makeActor();
+    bullet->transform().x = actor().transform().x + 10;
+    bullet->transform().y = actor().transform().y;
+    bullet->addBehavior<Bullet>();
+    actor().game().getPlugin<GamePlugin>()->addActor(bullet);
+    --p_num_bullets;
+}
