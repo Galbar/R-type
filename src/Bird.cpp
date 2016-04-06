@@ -79,8 +79,8 @@ void Bird::fixedUpdate()
     }
     else if (p_circle)
     {
-        p_kinematic->velocity().x *= cos(p_angle);
-        p_kinematic->velocity().y *= sin(p_angle);
+        p_kinematic->velocity().x += 10*cos(p_angle);
+        p_kinematic->velocity().y += 10*sin(p_angle);
 
         if (p_angle_stepsize > 0)
         {
