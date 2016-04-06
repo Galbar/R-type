@@ -19,8 +19,13 @@ git clone https://github.com/g-truc/glm.git
 git clone --branch 5.3.2 https://github.com/lua/lua.git
 git clone https://github.com/xaviermariaconejo/R-type.git
 
+curl -R -O http://www.lua.org/ftp/lua-5.3.2.tar.gz
+tar zxf lua-5.3.2.tar.gz
+cd lua-5.3.2
+make linux
+
 # Compile framework
-cd Hum2D
+cd ../Hum2D
 make
 
 cd ../lua
