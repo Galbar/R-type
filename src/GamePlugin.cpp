@@ -1,15 +1,15 @@
 #include "GamePlugin.hpp"
 #include "Defines.hpp"
 #include <algorithm>
+#include "GameBehavior.hpp"
+#include "Resources.hpp"
 
 bool compareActors(h2d::Actor* a, h2d::Actor*b)
 {
-    return a->transform().x < a->transform().x;
+    return a->transform().x < b->transform().x;
 }
 
-GamePlugin::GamePlugin():
-p_actors_lower(p_actors.begin()),
-p_actors_upper(p_actors.end())
+GamePlugin::GamePlugin()
 {
 
 }
@@ -23,6 +23,11 @@ void GamePlugin::gameStart()
 {
     p_camera_kinematic = game().makeActor()->addBehavior<h2d::Kinematic>();
     p_mogl = game().getPlugin<mogl::MultimediaOGL>();
+
+    // TODO: Load resources
+    loadResources(*p_mogl, "./res/resources.def");
+
+    // TODO: Read configuration
 }
 
 void GamePlugin::gameEnd()
@@ -124,6 +129,18 @@ void GamePlugin::preFixedUpdate()
     }
 }
 
+void GamePlugin::postFixedUpdate()
+{
+    // TODO: Change scene, if needed
+    static bool initialized = false;
+    if (!initialized)
+    {
+        auto a = game().makeActor();
+        p_factory->build("Player", *a, tiled::Object());
+        initialized = true;
+    }
+}
+
 void GamePlugin::postUpdate()
 {
     p_camera_kinematic->velocity().x = p_camera_speed;
@@ -143,24 +160,16 @@ float GamePlugin::getCameraSpeed() const
     return p_camera_speed;
 }
 
+
+void GamePlugin::setActorFactory(ActorFactory& factory)
+{
+    p_factory = & factory;
+}
+
 void GamePlugin::addActor(h2d::Actor* actor)
 {
-    p_actors.insert(std::upper_bound(p_actors.begin(), p_actors.end(), actor, compareActors), actor);
-    if ((*p_actors_lower)->transform().x <= actor->transform().x
-            && (*p_actors_upper)->transform().x >= actor->transform().x)
-    {
-        if (!actor->isActive())
-        {
-            actor->activate();
-        }
-    }
-    else
-    {
-        if (actor->isActive())
-        {
-            actor->deactivate();
-        }
-    }
+    p_inactive_actors.insert(actor);
+    actor->deactivate();
 }
 
 void GamePlugin::addCollider(Collider* collider)
@@ -207,25 +216,21 @@ void GamePlugin::removeCollider(Collider* collider)
 
 void GamePlugin::updateActiveActors()
 {
-    auto prev_x = p_camera_kinematic->actor().transform().x;
-    float min = p_mogl->getCamera().getPosition().x - 10;
-    float max = min + ORTHO_WIDTH + 10;
-    p_camera_kinematic->actor().transform().x = min;
-    auto new_lower = std::upper_bound(p_actors_lower, p_actors_upper, &p_camera_kinematic->actor(), compareActors);
-    p_camera_kinematic->actor().transform().x = max;
-    auto new_upper = std::upper_bound(p_actors_upper, p_actors.end(), &p_camera_kinematic->actor(), compareActors);
-    p_camera_kinematic->actor().transform().x = prev_x;
+    float max = p_mogl->getCamera().getPosition().x + ORTHO_WIDTH + 3;
 
-    for (auto it = p_actors_lower; it != new_lower; ++it)
+    std::vector<h2d::Actor*> to_remove;
+    for (h2d::Actor* actor : p_inactive_actors)
     {
-        (*it)->deactivate();
+        if (actor->transform().x < max)
+        {
+            actor->addBehavior<GameBehavior>();
+            actor->activate();
+            to_remove.push_back(actor);
+        }
     }
 
-    for (auto it = p_actors_upper; it != new_upper; ++it)
+    for(auto a : to_remove)
     {
-        (*it)->activate();
+        p_inactive_actors.erase(a);
     }
-
-    p_actors_lower = new_lower;
-    p_actors_upper = new_upper;
 }

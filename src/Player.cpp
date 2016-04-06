@@ -23,6 +23,7 @@ void Player::init()
 {
     p_mogl = actor().game().getPlugin<mogl::MultimediaOGL>();
     p_game_pl = actor().game().getPlugin<GamePlugin>();
+    p_game_pl->addActor(&actor());
 }
 
 void Player::fixedUpdate()
@@ -35,7 +36,6 @@ void Player::fixedUpdate()
             h2d_log("wall!!!");
         }
     }
-    h2d_log("collisions done!!!");
 
     p_kinematic->velocity().x = p_game_pl->getCameraSpeed();
     p_kinematic->velocity().y = 0.0;
@@ -55,6 +55,11 @@ void Player::fixedUpdate()
     if (p_mogl->input().isKeyDown(sf::Keyboard::Down))
     {
         p_kinematic->velocity().y += 3;
+    }
+
+    if (p_mogl->input().isKeyPressed(sf::Keyboard::Space))
+    {
+        actor().game().destroy(actor());
     }
 }
 

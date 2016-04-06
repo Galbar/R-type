@@ -1,28 +1,12 @@
 #include "main.hpp"
 
-class Test : public h2d::Behavior
-{
-public:
-
-void fixedUpdate() override
-{
-
-    mogl::MultimediaOGL* p_mogl;
-    p_mogl = actor().game().getPlugin<mogl::MultimediaOGL>();
-    if(p_mogl->input().isKeyDown(sf::Keyboard::Up))
-    {
-        auto bullet = actor().game().makeActor();
-       // bullet->addBehavior<Bird>();
-        actor().game().getPlugin<GamePlugin>()->addActor(bullet);
-    }
-}
-};
-
 int main(void)
 {
     h2d::Game game(60);
     game.addPlugin<h2d::KinematicWorld>();
     ActorFactory factory;
+
+    // Add here the actor builders
     factory.set<PlayerBuilder>("Player");
 
     sf::ContextSettings settings;
@@ -38,30 +22,9 @@ int main(void)
     mogl->getCamera().setCenter(glm::vec3(0, 0, 1));
     mogl->getCamera().setUp(glm::vec3(0, 1, 0));
 
-    game.addPlugin<GamePlugin>()->setCameraSpeed(0.5);
-
-    mogl->textures().load("sprites", "./sprites.png");
-
-    auto a = game.makeActor();
-    mogl::SpriteAnimation anim {
-        mogl->textures().get("sprites"),
-        0, 0, 0, 0, 48, 48,
-        {0,1,2,3,5,6,7,8},
-        std::vector<h2d::Time>(8, h2d::Time::milliseconds(300))
-    };
-
-    mogl->spriteAnimations().load("player_anim", anim);
-
-    factory.build("Player", *a, tiled::Object());
-
-    a = game.makeActor();
-    a->addBehavior<mogl::Rectangle>(2, 2, sf::Color::Red);
-    a->addBehavior<Collider>(2, 2, Collider::Type::Wall);
-    a->transform().x = 10;
-    a->transform().y = 10;
-
-    //a = game.makeActor();
-    //a->addBehavior<Test>();
+    auto game_pl = game.addPlugin<GamePlugin>();
+    game_pl->setActorFactory(factory);
+    game_pl->setCameraSpeed(1.5);
 
     game.run();
     return 0;

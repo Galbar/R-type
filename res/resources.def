@@ -1,0 +1,10 @@
+# resource_name resource_filename
+TEXTURES
+sprites sprites.png
+
+ANIMATIONS
+player_anim player.anim
+
+SOUNDS
+
+MUSIC

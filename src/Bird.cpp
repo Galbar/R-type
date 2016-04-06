@@ -6,13 +6,13 @@
 void BirdBuilder::construct(h2d::Actor& actor, const tiled::Object& tmx_object)
 {
     auto mogl = actor.game().getPlugin<mogl::MultimediaOGL>();
-    auto sprite = actor.addBehavior<mogl::AnimatedSprite>(1, 1, mogl->spriteAnimations().get("bird_anim"));
+    //auto sprite = actor.addBehavior<mogl::AnimatedSprite>(1, 1, mogl->spriteAnimations().get("bird_anim"));
     auto collider = actor.addBehavior<Collider>(1, 1, Collider::Type::Enemy);
     auto kinematic = actor.addBehavior<h2d::Kinematic>();
     actor.transform().z = 10;
     actor.transform().x = 10;
     actor.transform().y = 10;
-    actor.addBehavior<Bird>(sprite, collider, kinematic);
+    actor.addBehavior<Bird>(nullptr, collider, kinematic);
 }
 
 Bird::Bird(mogl::AnimatedSprite* sprite, Collider* collider, h2d::Kinematic* kinematic):
