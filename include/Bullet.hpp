@@ -6,11 +6,6 @@
 #include "ActorFactory.hpp"
 #include "Collider.hpp"
 
-class BulletBuilder : public ActorConstructor
-{
-    void construct(h2d::Actor&, const tiled::Object&) override;
-};
-
 class Bullet : public h2d::Behavior
 {
 public:

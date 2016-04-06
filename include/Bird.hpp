@@ -29,7 +29,7 @@ private:
 
     bool p_circle;
     int p_num_bullets;
-    float p_angle;
+    float p_angle, p_angle_stepsize, p_angle_limit;
     h2d::Clock p_clk;
 };
 

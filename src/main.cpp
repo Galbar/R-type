@@ -12,7 +12,7 @@ void fixedUpdate() override
     if(p_mogl->input().isKeyDown(sf::Keyboard::Up))
     {
         auto bullet = actor().game().makeActor();
-        bullet->addBehavior<Bird>();
+       // bullet->addBehavior<Bird>();
         actor().game().getPlugin<GamePlugin>()->addActor(bullet);
     }
 }
@@ -60,8 +60,8 @@ int main(void)
     a->transform().x = 10;
     a->transform().y = 10;
 
-    a = game.makeActor();
-    a->addBehavior<Test>();
+    //a = game.makeActor();
+    //a->addBehavior<Test>();
 
     game.run();
     return 0;

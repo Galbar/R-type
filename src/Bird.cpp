@@ -19,16 +19,27 @@ Bird::Bird(mogl::AnimatedSprite* sprite, Collider* collider, h2d::Kinematic* kin
 p_sprite(sprite),
 p_collider(collider),
 p_kinematic(kinematic),
-p_shooting(false),
 p_circle(false),
-p_num_bullets(3),
-p_angle(0.0)
+p_num_bullets(3)
 {}
 
 void Bird::init()
 {
     p_mogl = actor().game().getPlugin<mogl::MultimediaOGL>();
     p_game_pl = actor().game().getPlugin<GamePlugin>();
+
+    if (actor().transform().y > p_mogl->getCamera().getPosition().y/2)
+    {
+        p_angle = 3.14/2;
+        p_angle_stepsize = 0.1;
+        p_angle_limit = (3*3.14)/2;
+    }
+    else
+    {
+        p_angle = (3*3.14)/2;
+        p_angle_stepsize = -0.1;
+        p_angle_limit = 3.14/2;
+    }
 }
 
 void Bird::fixedUpdate()
@@ -48,40 +59,44 @@ void Bird::fixedUpdate()
     p_kinematic->velocity().y = 0.0;
 
     double pos_x = actor().transform().x;
-    double pos_y = actor().transform().y;
     double width = p_mogl->getCamera().getPosition().x + ORTHO_WIDTH;
-    double height = p_mogl->getCamera().getPosition().y;
     if (pos_x > width - ORTHO_WIDTH/6)
     {
         p_kinematic->velocity().x -= 5;
-    }
-    else if (pos_x > width - 2*ORTHO_WIDTH/6  && p_num_bullets == 3)
-    {
-        shoot();
-        p_shooting = true;
         p_clk.reset();
     }
-    else if (p_num_bullets > 0 && p_clk.getTime().asSeconds() > 0.5)
+    else if (pos_x > width - 2*ORTHO_WIDTH/6  && p_num_bullets > 0)
     {
-        shoot();
-        p_clk.reset();
-        if (p_num_bullets == 0)
+        if (p_clk.getTime().asSeconds() > 0.5)
         {
-            p_circle = true;
+            shoot();
+            p_clk.reset();
+            if (p_num_bullets == 0)
+            {
+                p_circle = true;
+            }
         }
     }
     else if (p_circle)
     {
-        float angle_stepsize = 0.1;
-
         p_kinematic->velocity().x *= cos(p_angle);
         p_kinematic->velocity().y *= sin(p_angle);
 
-        p_angle += angle_stepsize;
-
-        if (p_angle < (3*3.14)/4)
+        if (p_angle_stepsize > 0)
         {
-            p_circle = false;
+            p_angle += p_angle_stepsize;
+            if (p_angle > p_angle_limit)
+            {
+                p_circle = false;
+            }
+        }
+        else
+        {
+            p_angle -= p_angle_stepsize;
+            if (p_angle < p_angle_limit)
+            {
+                p_circle = false;
+            }
         }
     }
     else
@@ -93,9 +108,9 @@ void Bird::fixedUpdate()
 void Bird::shoot()
 {
     auto bullet = actor().game().makeActor();
+    bullet->addBehavior<Bullet>(p_sprite, p_collider, p_kinematic, 3, 0);
     bullet->transform().x = actor().transform().x + 10;
     bullet->transform().y = actor().transform().y;
-    bullet->addBehavior<Bullet>();
     actor().game().getPlugin<GamePlugin>()->addActor(bullet);
     --p_num_bullets;
 }

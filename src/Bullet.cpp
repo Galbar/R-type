@@ -2,18 +2,6 @@
 #include "Collider.hpp"
 #include "Defines.hpp"
 
-void BulletBuilder::construct(h2d::Actor& actor, const tiled::Object& tmx_object)
-{
-    auto mogl = actor.game().getPlugin<mogl::MultimediaOGL>();
-    auto sprite = actor.addBehavior<mogl::AnimatedSprite>(1, 1, mogl->spriteAnimations().get("bird_anim"));
-    auto collider = actor.addBehavior<Collider>(1, 1, Collider::Type::Enemy);
-    auto kinematic = actor.addBehavior<h2d::Kinematic>();
-    actor.transform().z = 10;
-    actor.transform().x = 10;
-    actor.transform().y = 10;
-    actor.addBehavior<Bullet>(sprite, collider, kinematic);
-}
-
 Bullet::Bullet(mogl::AnimatedSprite* sprite, Collider* collider, h2d::Kinematic* kinematic, float vel_x, float vel_y):
 p_sprite(sprite),
 p_collider(collider),
