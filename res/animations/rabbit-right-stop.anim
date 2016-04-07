@@ -1,0 +1,10 @@
+# texture name
+rabbit
+# offset_x offset_y margin_x margin_y width height
+32 64 0 0 32 32
+# number of frames
+1
+# frame_order
+0
+# time per frame (ms)
+100

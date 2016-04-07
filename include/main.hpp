@@ -9,5 +9,9 @@
 #include "Player.hpp"
 #include "Defines.hpp"
 #include "Bird.hpp"
+#include "Owl.hpp"
+#include "Rabbit.hpp"
+#include "Bee.hpp"
+#include "BigButterfly.hpp"
 
 #endif /* ifndef MAIN_HPP */

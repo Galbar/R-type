@@ -1,20 +1,20 @@
-#ifndef BIRD_HPP
-#define BIRD_HPP
+#ifndef BIG_BUTTERFLY_HPP
+#define BIG_BUTTERFLY_HPP
 #include "Hum2D/Hum2D.hpp"
 #include "MOGL/MOGL.hpp"
 #include "GamePlugin.hpp"
 #include "ActorFactory.hpp"
 #include "Collider.hpp"
 
-class BirdBuilder : public ActorConstructor
+class BigButterflyBuilder : public ActorConstructor
 {
     void construct(h2d::Actor&, const tiled::Object&) override;
 };
 
-class Bird : public h2d::Behavior
+class BigButterfly : public h2d::Behavior
 {
 public:
-    Bird(Collider* collider, h2d::Kinematic* kinematic);
+    BigButterfly(Collider* collider, h2d::Kinematic* kinematic);
     void init() override;
     void fixedUpdate() override;
 
@@ -24,12 +24,12 @@ private:
     h2d::Kinematic* p_kinematic;
     GamePlugin* p_game_pl;
 
-    void shoot();
+    void shoot(float x, float y);
 
-    bool p_circle;
-    int p_num_bullets;
-    float p_angle, p_angle_stepsize, p_angle_limit;
+    float p_angle, p_angle_stepsize;
     h2d::Clock p_clk;
 };
 
-#endif /* ifndef BIRD_HPP */
+#endif /* ifndef BIG_BUTTERFLY_HPP */
+
+

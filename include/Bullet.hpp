@@ -9,11 +9,11 @@
 class Bullet : public h2d::Behavior
 {
 public:
-    Bullet(mogl::AnimatedSprite* sprite, Collider* collider, h2d::Kinematic* kinematic, float vel_x, float vel_y);
+    Bullet(Collider* collider, h2d::Kinematic* kinematic, float vel_x, float vel_y);
+    void init() override;
     void fixedUpdate() override;
 
 private:
-    mogl::AnimatedSprite* p_sprite;
     Collider* p_collider;
     h2d::Kinematic* p_kinematic;
     GamePlugin* p_game_pl;

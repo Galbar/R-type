@@ -8,6 +8,11 @@ int main(void)
 
     // Add here the actor builders
     factory.set<PlayerBuilder>("Player");
+    factory.set<OwlBuilder>("Owl");
+    factory.set<RabbitBuilder>("Rabbit");
+    factory.set<BirdBuilder>("Bird");
+    factory.set<BeeBuilder>("Bee");
+    factory.set<BigButterflyBuilder>("BigButterfly");
 
     sf::ContextSettings settings;
     settings.antialiasingLevel = 2;

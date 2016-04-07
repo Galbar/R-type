@@ -1,0 +1,10 @@
+# texture name
+big-butterfly
+# offset_x offset_y margin_x margin_y width height
+0 96 0 0 48 48
+# number of frames
+4
+# frame_order
+0 1 2 1
+# time per frame (ms)
+75 75 75 75

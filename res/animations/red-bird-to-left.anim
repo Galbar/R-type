@@ -1,0 +1,10 @@
+# texture name
+birds
+# offset_x offset_y margin_x margin_y width height
+192 32 0 0 32 32
+# number of frames
+4
+# frame_order
+2 1 0 1
+# time per frame (ms)
+75 75 75 75

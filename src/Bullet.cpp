@@ -2,13 +2,17 @@
 #include "Collider.hpp"
 #include "Defines.hpp"
 
-Bullet::Bullet(mogl::AnimatedSprite* sprite, Collider* collider, h2d::Kinematic* kinematic, float vel_x, float vel_y):
-p_sprite(sprite),
+Bullet::Bullet(Collider* collider, h2d::Kinematic* kinematic, float vel_x, float vel_y):
 p_collider(collider),
 p_kinematic(kinematic),
 p_vel_x(vel_x),
 p_vel_y(vel_y)
 {}
+
+void Bullet::init()
+{
+    p_game_pl = actor().game().getPlugin<GamePlugin>();
+}
 
 void Bullet::fixedUpdate()
 {

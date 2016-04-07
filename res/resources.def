@@ -1,9 +1,35 @@
 # resource_name resource_filename
 TEXTURES
 sprites sprites.png
+owl owl.png
+rabbit rabbit.png
+birds birds.png
+butterflies butterflies.png
+big-butterfly big-butterfly.png
+spider spider.png
+bee bee.png
 
 ANIMATIONS
 player_anim player.anim
+owl-to-left owl-to-left.anim
+owl-to-right owl-to-right.anim
+blue-bird-to-left blue-bird-to-left.anim
+blue-bird-to-right blue-bird-to-right.anim
+brown-bird-to-left brown-bird-to-left.anim
+brown-bird-to-right brown-bird-to-right.anim
+red-bird-to-left red-bird-to-left.anim
+red-bird-to-right red-bird-to-right.anim
+butterfly-main butterfly-main.anim
+butterfly-shield butterfly-shield.anim
+butterfly-shoot butterfly-shoot.anim
+rabbit-left-stop rabbit-left-stop.anim
+rabbit-left-up rabbit-left-up.anim
+rabbit-right-stop rabbit-right-stop.anim
+rabbit-right-up rabbit-right-up.anim
+bee-left bee-left.anim
+bee-right bee-right.anim
+big-butterfly-left big-butterfly-left.anim
+big-butterfly-right big-butterfly-right.anim
 
 SOUNDS
 

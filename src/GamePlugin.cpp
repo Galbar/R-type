@@ -136,7 +136,17 @@ void GamePlugin::postFixedUpdate()
     if (!initialized)
     {
         auto a = game().makeActor();
-        p_factory->build("Player", *a, tiled::Object());
+       // p_factory->build("Player", *a, tiled::Object());
+       // a = game().makeActor();
+       // p_factory->build("Owl", *a, tiled::Object());
+       // a = game().makeActor();
+      //  p_factory->build("Rabbit", *a, tiled::Object());
+       // a = game().makeActor();
+       // p_factory->build("Bird", *a, tiled::Object());
+      //  a = game().makeActor();
+      //  p_factory->build("Bee", *a, tiled::Object());
+        a = game().makeActor();
+        p_factory->build("BigButterfly", *a, tiled::Object());
         initialized = true;
     }
 }

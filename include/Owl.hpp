@@ -1,35 +1,34 @@
-#ifndef BIRD_HPP
-#define BIRD_HPP
+#ifndef OWL_HPP
+#define OWL_HPP
 #include "Hum2D/Hum2D.hpp"
 #include "MOGL/MOGL.hpp"
 #include "GamePlugin.hpp"
 #include "ActorFactory.hpp"
 #include "Collider.hpp"
 
-class BirdBuilder : public ActorConstructor
+class OwlBuilder : public ActorConstructor
 {
-    void construct(h2d::Actor&, const tiled::Object&) override;
+    void construct(h2d::Actor&, const tiled::Object&);
 };
 
-class Bird : public h2d::Behavior
+class Owl : public h2d::Behavior
 {
 public:
-    Bird(Collider* collider, h2d::Kinematic* kinematic);
+    Owl(Collider* collider, h2d::Kinematic* kinematic, bool shooter);
     void init() override;
     void fixedUpdate() override;
 
 private:
     mogl::MultimediaOGL* p_mogl;
+    mogl::AnimatedSprite* p_sprite;
     Collider* p_collider;
     h2d::Kinematic* p_kinematic;
     GamePlugin* p_game_pl;
 
     void shoot();
 
-    bool p_circle;
-    int p_num_bullets;
-    float p_angle, p_angle_stepsize, p_angle_limit;
+    bool p_shooter;
     h2d::Clock p_clk;
 };
 
-#endif /* ifndef BIRD_HPP */
+#endif /* ifndef OWL_HPP */
