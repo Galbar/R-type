@@ -14,7 +14,7 @@ class BeeBuilder : public ActorConstructor
 class Bee : public h2d::Behavior
 {
 public:
-    Bee(Collider* collider, h2d::Kinematic* kinematic);
+    Bee(Collider* collider, h2d::Kinematic* kinematic, const std::string&);
     void init() override;
     void fixedUpdate() override;
 
@@ -24,6 +24,7 @@ private:
     Collider* p_collider;
     h2d::Kinematic* p_kinematic;
     GamePlugin* p_game_pl;
+    std::string p_next_level;
 
     void shoot(float x, float y);
 

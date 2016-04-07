@@ -7,17 +7,18 @@
 #include "ActorFactory.hpp"
 #include "GamePlugin.hpp"
 
-class PlayButtonBuilder : public ActorConstructor
+class ChangeLevelButtonBuilder: public ActorConstructor
 {
     void construct(h2d::Actor&, const tiled::Object&) override;
 };
 
-class PlayButton : public h2d::Behavior
+class ChangeLevelButton : public h2d::Behavior
 {
 public:
-    PlayButton(float width, float height);
+    ChangeLevelButton(float width, float height, const std::string& target);
     void fixedUpdate() override;
 private:
     float p_width, p_height;
+    std::string p_target;
 };
 #endif /* ifndef PLAY_BUTTON_HPP */

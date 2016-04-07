@@ -7,8 +7,11 @@ class GamePlugin;
 class GameBehavior : public h2d::Behavior
 {
 public:
+    virtual ~GameBehavior();
     virtual void init() override;
     virtual void fixedUpdate() override;
+    virtual void onDeactivate() override;
+    virtual void onDestroy() override;
 
 private:
     static GamePlugin* s_p_game_pl;

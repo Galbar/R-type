@@ -323,7 +323,7 @@ return {
         {
           id = 1,
           name = "",
-          type = "PlayButton",
+          type = "ChangeLevelButton",
           shape = "rectangle",
           x = 298,
           y = 279,
@@ -331,7 +331,9 @@ return {
           height = 190,
           rotation = 0,
           visible = true,
-          properties = {}
+          properties = {
+            ["target"] = "level1"
+          }
         }
       }
     }

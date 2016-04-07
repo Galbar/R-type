@@ -8,12 +8,14 @@ int main(void)
 
     // Add here the actor builders
     factory.set<PlayerBuilder>("Player");
+    factory.set<WallBuilder>("Wall");
     factory.set<OwlBuilder>("Owl");
     factory.set<RabbitBuilder>("Rabbit");
     factory.set<BirdBuilder>("Bird");
     factory.set<BeeBuilder>("Bee");
     factory.set<BigButterflyBuilder>("BigButterfly");
-    factory.set<PlayButtonBuilder>("PlayButton");
+    factory.set<PowerUpBuilder>("PowerUp");
+    factory.set<ChangeLevelButtonBuilder>("ChangeLevelButton");
 
     sf::ContextSettings settings;
     settings.antialiasingLevel = 2;
@@ -30,8 +32,8 @@ int main(void)
 
     auto game_pl = game.addPlugin<GamePlugin>();
     game_pl->setActorFactory(factory);
-    game_pl->setCameraSpeed(0);
-    game_pl->changeLevel("main-menu");
+    game_pl->setCameraSpeed(1);
+    game_pl->changeLevel("level2");
 
     game.run();
     return 0;

@@ -5,6 +5,11 @@
 GamePlugin* GameBehavior::s_p_game_pl = nullptr;
 mogl::MultimediaOGL* GameBehavior::s_p_mogl = nullptr;
 
+GameBehavior::~GameBehavior()
+{
+
+}
+
 void GameBehavior::init()
 {
     if (s_p_game_pl == nullptr)
@@ -26,4 +31,13 @@ void GameBehavior::fixedUpdate()
     {
         actor().game().destroy(actor());
     }
+}
+
+void GameBehavior::onDeactivate()
+{}
+
+
+void GameBehavior::onDestroy()
+{
+    s_p_game_pl->removeActor(&actor());
 }

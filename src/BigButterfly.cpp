@@ -33,12 +33,13 @@ void BigButterfly::fixedUpdate()
         if (collision.other->getType() == Collider::Type::PlayerBullet)
         {
             actor().game().destroy(actor());
+            p_game_pl->changeLevel("credits");
             return;
         }
     }
 
 
-    p_kinematic->velocity().x = p_game_pl->getCameraSpeed() + 6*cos(p_angle);
+    p_kinematic->velocity().x = 6*cos(p_angle);
     p_kinematic->velocity().y = 6*sin(p_angle);
 
     p_angle += p_angle_stepsize;

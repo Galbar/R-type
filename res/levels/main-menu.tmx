@@ -125,6 +125,10 @@
   <image source="../textures/main-menu-play-btn.png"/>
  </imagelayer>
  <objectgroup name="Object Layer 1">
-  <object id="1" type="PlayButton" x="298" y="279" width="432" height="190"/>
+  <object id="1" type="ChangeLevelButton" x="298" y="279" width="432" height="190">
+   <properties>
+    <property name="target" value="level1"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>

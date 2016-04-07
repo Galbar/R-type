@@ -22,12 +22,8 @@ extern "C"
 
 GamePlugin::GamePlugin():
 p_scene(new Scene),
-p_inactive_actors(new std::unordered_set<h2d::Actor*>),
-p_player_collider(new std::unordered_set<Collider*>),
-p_enemy_collider(new std::unordered_set<Collider*>),
-p_player_bullet_collider(new std::unordered_set<Collider*>),
-p_enemy_bullet_collider(new std::unordered_set<Collider*>),
-p_wall_collider(new std::unordered_set<Collider*>)
+p_actors(new std::unordered_set<h2d::Actor*>),
+p_colliders(new std::unordered_set<Collider*>)
 {
 
 }
@@ -35,12 +31,8 @@ p_wall_collider(new std::unordered_set<Collider*>)
 GamePlugin::~GamePlugin()
 {
     delete p_scene;
-    delete p_wall_collider;
-    delete p_enemy_bullet_collider;
-    delete p_player_bullet_collider;
-    delete p_enemy_collider;
-    delete p_player_collider;
-    delete p_inactive_actors;
+    delete p_colliders;
+    delete p_actors;
 }
 
 void GamePlugin::gameStart()
@@ -57,94 +49,22 @@ void GamePlugin::gameEnd()
 
 void GamePlugin::preFixedUpdate()
 {
+    for (Collider* one : *p_colliders)
+    {
+        one->clearCollisions();
+    }
     sf::FloatRect intersection;
-    for (Collider* player_col : *p_player_collider)
+    for (Collider* one : *p_colliders)
     {
-        player_col->clearCollisions();
-        for (Collider* enemy_col : *p_enemy_collider)
+        for (Collider* other : *p_colliders)
         {
-            enemy_col->clearCollisions();
-            if (player_col->getRect().intersects(enemy_col->getRect(), intersection))
+            if (other == one) continue;
+            if (one->getRect().intersects(other->getRect(), intersection))
             {
-                Collision col { enemy_col, intersection };
-                player_col->pushCollision(col);
-                col.other = player_col;
-                enemy_col->pushCollision(col);
-            }
-        }
-
-        for (Collider* enemy_bullet_col : *p_enemy_bullet_collider)
-        {
-            enemy_bullet_col->clearCollisions();
-            if (player_col->getRect().intersects(enemy_bullet_col->getRect(), intersection))
-            {
-                Collision col { enemy_bullet_col, intersection };
-                player_col->pushCollision(col);
-                col.other = player_col;
-                enemy_bullet_col->pushCollision(col);
-            }
-        }
-
-        for (Collider* wall : *p_wall_collider)
-        {
-            wall->clearCollisions();
-            if (player_col->getRect().intersects(wall->getRect(), intersection))
-            {
-                Collision col { wall, intersection };
-                player_col->pushCollision(col);
-                col.other = player_col;
-                wall->pushCollision(col);
-            }
-        }
-    }
-
-    for (Collider* enemy_col : *p_enemy_collider)
-    {
-        for (Collider* wall : *p_wall_collider)
-        {
-            if (enemy_col->getRect().intersects(wall->getRect(), intersection))
-            {
-                Collision col { wall, intersection };
-                enemy_col->pushCollision(col);
-                col.other = enemy_col;
-                wall->pushCollision(col);
-            }
-        }
-
-        for (Collider* player_bullet_col : *p_player_bullet_collider)
-        {
-            if (enemy_col->getRect().intersects(player_bullet_col->getRect(), intersection))
-            {
-                Collision col { player_bullet_col, intersection };
-                enemy_col->pushCollision(col);
-                col.other = enemy_col;
-                player_bullet_col->pushCollision(col);
-            }
-        }
-    }
-
-    for (Collider* enemy_bullet_col : *p_enemy_bullet_collider)
-    {
-        for (Collider* wall : *p_wall_collider)
-        {
-            if (enemy_bullet_col->getRect().intersects(wall->getRect(), intersection))
-            {
-                Collision col { wall, intersection };
-                enemy_bullet_col->pushCollision(col);
-                col.other = enemy_bullet_col;
-                wall->pushCollision(col);
-            }
-        }
-
-        for (Collider* player_bullet_col : *p_player_bullet_collider)
-        {
-            player_bullet_col->clearCollisions();
-            if (enemy_bullet_col->getRect().intersects(player_bullet_col->getRect(), intersection))
-            {
-                Collision col { player_bullet_col, intersection };
-                enemy_bullet_col->pushCollision(col);
-                col.other = enemy_bullet_col;
-                player_bullet_col->pushCollision(col);
+                Collision col { other, intersection };
+                one->pushCollision(col);
+                col.other = one;
+                other->pushCollision(col);
             }
         }
     }
@@ -156,19 +76,22 @@ void GamePlugin::postFixedUpdate()
     {
         p_change_level = false;
 
-        //Clear resources from previous scene
-        for (auto name : p_scene->animations)
-        {
-            p_mogl->spriteAnimations().free(name);
-        }
-        for (auto name : p_scene->textures)
-        {
-            p_mogl->textures().free(name);
-        }
+        ////Clear resources from previous scene
+        //for (auto name : p_scene->animations)
+        //{
+        //    p_mogl->spriteAnimations().free(name);
+        //}
+        //p_scene->animations.clear();
         for (auto actor : p_scene->actors)
         {
             game().destroy(actor);
         }
+        for (auto actor : *p_actors)
+        {
+            game().destroy(actor);
+        }
+        p_actors->clear();
+        p_scene->actors.clear();
 
         // Init new scene
         lua_State* L = luaL_newstate();
@@ -185,6 +108,17 @@ void GamePlugin::postFixedUpdate()
 
         tiled::Color c = p_active_map.getBackgroundColor();
         p_mogl->setClearColor(sf::Color(c.r, c.g, c.b));
+        p_camera_kinematic->actor().transform().x = 0.0;
+
+        const tiled::Value& cam_speed = p_active_map.getProperties().get("camera_speed");
+        if (cam_speed.getType() == tiled::Value::Type::FLOAT)
+        {
+            setCameraSpeed(cam_speed.getFloat());
+        }
+        else
+        {
+            setCameraSpeed(0);
+        }
 
         int z_index = p_active_map.getLayers().size();
         for (tiled::Layer* layer : p_active_map.getLayers())
@@ -213,7 +147,6 @@ void GamePlugin::postFixedUpdate()
                     {
                         p_mogl->textures().load(filename, "res/levels/" + ts->getImage()->getSource());
                         tex = p_mogl->textures().get(filename);
-                        p_scene->textures.push_back(filename);
                     }
                     mogl::Drawable* drawable;
                     auto it = ts->getTiles().find(tile_id);
@@ -233,7 +166,7 @@ void GamePlugin::postFixedUpdate()
                     else
                     {
                         tiled::Tile* tile = it->second;
-                        std::string animation_name = "tile_" + std::to_string(tile->getGId());
+                        std::string animation_name = p_next_level_name + "_" + ts->getName() + "_tile_" + std::to_string(tile->getGId());
                         mogl::SpriteAnimation* anim = p_mogl->spriteAnimations().get(animation_name);
                         if (anim == nullptr)
                         {
@@ -252,7 +185,7 @@ void GamePlugin::postFixedUpdate()
                             };
 
                             p_mogl->spriteAnimations().load(animation_name, anim_data);
-                            p_scene->animations.push_back(animation_name);
+                            //p_scene->animations.push_back(animation_name);
                             anim = p_mogl->spriteAnimations().get(animation_name);
                         }
 
@@ -276,7 +209,20 @@ void GamePlugin::postFixedUpdate()
                     actor->transform().x = static_cast<float>(object->getX()) / TILE_SIZE;
                     actor->transform().y = static_cast<float>(object->getY()) / TILE_SIZE;
                     p_factory->build(object->getType(), *actor, *object);
-                    addActor(actor);
+                    auto handle = object->getProperties().get("no_handle");
+                    if (handle.getType() == tiled::Value::Type::STRING)
+                    {
+                        handle = tiled::Value(handle.getString() == "true");
+                    }
+                    else if (handle.getType() != tiled::Value::Type::BOOL)
+                    {
+                        handle = tiled::Value(false);
+                    }
+
+                    if (!handle.getBool())
+                    {
+                        addActor(actor);
+                    }
                 }
             }
             else if (layer->getType() == tiled::Layer::LayerType::IMAGE_LAYER)
@@ -290,7 +236,6 @@ void GamePlugin::postFixedUpdate()
                 {
                     p_mogl->textures().load(filename, "res/levels/" + image_layer->getImage()->getSource());
                     tex = p_mogl->textures().get(filename);
-                    p_scene->textures.push_back(filename);
                 }
                 auto layer_actor = game().makeActor();
                 layer_actor->addBehavior<mogl::Sprite>(
@@ -315,6 +260,12 @@ void GamePlugin::postFixedUpdate()
 
 void GamePlugin::postUpdate()
 {
+    float width = static_cast<float>(p_active_map.getWidth() * p_active_map.getTileWidth()) / TILE_SIZE;
+    if (p_camera_kinematic->actor().transform().x >= width - ORTHO_WIDTH)
+    {
+        p_camera_kinematic->actor().transform().x = width - ORTHO_WIDTH;
+        p_camera_speed = 0.0;
+    }
     p_camera_kinematic->velocity().x = p_camera_speed;
     h2d::Transformation cam_transform = p_camera_kinematic->simulate(game().fixedUpdateLag());
     p_mogl->getCamera().setPosition(glm::vec3(cam_transform.x, cam_transform.y, -1));
@@ -340,70 +291,39 @@ void GamePlugin::setActorFactory(ActorFactory& factory)
 
 void GamePlugin::addActor(h2d::Actor* actor)
 {
-    p_inactive_actors->insert(actor);
+    p_actors->insert(actor);
+    actor->addBehavior<GameBehavior>();
     actor->deactivate();
 }
 
 void GamePlugin::addCollider(Collider* collider)
 {
-    switch (collider->getType()) {
-        case Collider::Type::PlayerBullet:
-            p_player_bullet_collider->insert(collider);
-            break;
-        case Collider::Type::EnemyBullet:
-            p_enemy_bullet_collider->insert(collider);
-            break;
-        case Collider::Type::Wall:
-            p_wall_collider->insert(collider);
-            break;
-        case Collider::Type::Player:
-            p_player_collider->insert(collider);
-            break;
-        case Collider::Type::Enemy:
-            p_enemy_collider->insert(collider);
-            break;
-    }
+    p_colliders->insert(collider);
 }
 
 void GamePlugin::removeCollider(Collider* collider)
 {
-    switch (collider->getType()) {
-        case Collider::Type::PlayerBullet:
-            p_player_bullet_collider->erase(collider);
-            break;
-        case Collider::Type::EnemyBullet:
-            p_enemy_bullet_collider->erase(collider);
-            break;
-        case Collider::Type::Wall:
-            p_wall_collider->erase(collider);
-            break;
-        case Collider::Type::Player:
-            p_player_collider->erase(collider);
-            break;
-        case Collider::Type::Enemy:
-            p_enemy_collider->erase(collider);
-            break;
-    }
+    p_colliders->erase(collider);
+}
+
+void GamePlugin::removeActor(h2d::Actor* actor)
+{
+    p_actors->erase(actor);
 }
 
 void GamePlugin::updateActiveActors()
 {
     float max = p_mogl->getCamera().getPosition().x + ORTHO_WIDTH + 3;
 
-    std::vector<h2d::Actor*> to_remove;
-    for (h2d::Actor* actor : *p_inactive_actors)
+    for (h2d::Actor* actor : *p_actors)
     {
         if (actor->transform().x < max)
         {
-            actor->addBehavior<GameBehavior>();
-            actor->activate();
-            to_remove.push_back(actor);
+            if (!actor->isActive())
+            {
+                actor->activate();
+            }
         }
-    }
-
-    for(auto a : to_remove)
-    {
-        p_inactive_actors->erase(a);
     }
 }
 

@@ -7,14 +7,18 @@ void BeeBuilder::construct(h2d::Actor& actor, const tiled::Object& tmx_object)
 {
     auto collider = actor.addBehavior<Collider>(1, 1, Collider::Type::Enemy);
     auto kinematic = actor.addBehavior<h2d::Kinematic>();
-    actor.transform().x = 20;
-    actor.transform().y = 10;
-    actor.addBehavior<Bee>(collider, kinematic);
+    auto next_level = tmx_object.getProperties().get("next_level");
+    if (next_level.getType() != tiled::Value::Type::STRING)
+    {
+        next_level = tiled::Value(std::string(""));
+    }
+    actor.addBehavior<Bee>(collider, kinematic, next_level.getString());
 }
 
-Bee::Bee(Collider* collider, h2d::Kinematic* kinematic):
+Bee::Bee(Collider* collider, h2d::Kinematic* kinematic, const std::string& next_level):
 p_collider(collider),
 p_kinematic(kinematic),
+p_next_level(next_level),
 p_dead(false),
 p_go_up(true),
 p_vel(3)
@@ -36,14 +40,18 @@ void Bee::fixedUpdate()
     {
         if (collision.other->getType() == Collider::Type::PlayerBullet)
         {
-            p_dead = true;
+            actor().game().destroy(actor());
+            if (p_next_level != "")
+            {
+                p_game_pl->changeLevel(p_next_level);
+            }
         }
     }
 
     if (!p_dead)
     {
         //Como es un boss, la camara en principio esta quieta, pero por si acaso
-        p_kinematic->velocity().x = p_game_pl->getCameraSpeed();
+        p_kinematic->velocity().x = 0.0;
 
         if (p_go_up)
         {

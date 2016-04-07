@@ -26,8 +26,10 @@ public:
     void setActorFactory(ActorFactory& factory);
 
     void addActor(h2d::Actor*);
+    void removeActor(h2d::Actor* actor);
     void addCollider(Collider*);
     void removeCollider(Collider*);
+
 
     const tiled::Map& getMap() const;
     void changeLevel(const std::string& name);
@@ -50,11 +52,7 @@ private:
     std::string p_next_level_name;
     float p_camera_speed;
     tiled::Map p_active_map;
-    std::unordered_set<h2d::Actor*>* p_inactive_actors;
-    std::unordered_set<Collider*>* p_player_collider;
-    std::unordered_set<Collider*>* p_enemy_collider;
-    std::unordered_set<Collider*>* p_player_bullet_collider;
-    std::unordered_set<Collider*>* p_enemy_bullet_collider;
-    std::unordered_set<Collider*>* p_wall_collider;
+    std::unordered_set<h2d::Actor*>* p_actors;
+    std::unordered_set<Collider*>* p_colliders;
 };
 #endif /* ifndef GAME_PLUGIN_HPP */

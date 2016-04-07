@@ -11,6 +11,16 @@ class PlayerBuilder : public ActorConstructor
     void construct(h2d::Actor&, const tiled::Object&) override;
 };
 
+class WallBuilder : public ActorConstructor
+{
+    void construct(h2d::Actor&, const tiled::Object&) override;
+};
+
+class PowerUpBuilder : public ActorConstructor
+{
+    void construct(h2d::Actor&, const tiled::Object&) override;
+};
+
 class Player : public h2d::Behavior
 {
 public:

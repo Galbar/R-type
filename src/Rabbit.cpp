@@ -7,11 +7,12 @@ void RabbitBuilder::construct(h2d::Actor& actor, const tiled::Object& tmx_object
 {
     auto collider = actor.addBehavior<Collider>(1, 1, Collider::Type::Enemy);
     auto kinematic = actor.addBehavior<h2d::Kinematic>();
-    bool shooter = tmx_object.getProperties().get("shooter").getBool();
-    actor.transform().z = 10;
-    actor.transform().x = 23;
-    actor.transform().y = 10;
-    actor.addBehavior<Rabbit>(collider, kinematic, shooter);
+    auto shooter = tmx_object.getProperties().get("shooter");
+    if (shooter.getType() != tiled::Value::Type::BOOL)
+    {
+        shooter = tiled::Value(false);
+    }
+    actor.addBehavior<Rabbit>(collider, kinematic, shooter.getBool());
 }
 
 Rabbit::Rabbit(Collider* collider, h2d::Kinematic* kinematic, bool shooter):

@@ -12,6 +12,7 @@ p_vel_y(vel_y)
 void Bullet::init()
 {
     p_game_pl = actor().game().getPlugin<GamePlugin>();
+    p_collider->setRect(sf::FloatRect(0.25, 0, 0.5, 0.5));
 }
 
 void Bullet::fixedUpdate()
@@ -20,6 +21,21 @@ void Bullet::fixedUpdate()
     while (p_collider->getNextCollision(collision))
     {
         if (collision.other->getType() == Collider::Type::Wall)
+        {
+            actor().game().destroy(actor());
+            return;
+        }
+        if (p_collider->getType() == Collider::Type::PlayerBullet && collision.other->getType() == Collider::Type::Enemy)
+        {
+            actor().game().destroy(actor());
+            return;
+        }
+        else if (collision.other->getType() == Collider::Type::EnemyBullet && p_collider->getType() == Collider::Type::PlayerBullet)
+        {
+            actor().game().destroy(actor());
+            return;
+        }
+        else if (p_collider->getType() == Collider::Type::EnemyBullet && collision.other->getType() == Collider::Type::PlayerBullet)
         {
             actor().game().destroy(actor());
             return;
