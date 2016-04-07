@@ -45,7 +45,11 @@ void Rabbit::fixedUpdate()
         }
         else if (collision.other->getType() == Collider::Type::Wall)
         {
-            p_vel *= -1;
+            if (p_collider->getRect().left <= (collision.intersection.left + collision.intersection.width)
+                || (p_collider->getRect().left + p_collider->getRect().width) >= collision.intersection.left)
+            {
+                p_vel *= -1;
+            }
         }
     }
 

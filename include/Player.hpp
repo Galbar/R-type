@@ -25,6 +25,9 @@ private:
     Collider* p_collider;
     h2d::Kinematic* p_kinematic;
     GamePlugin* p_game_pl;
-};
 
+    void shoot(float x, float y, float xx, float yy);
+
+    int p_shield, p_pwu_gun;
+};
 #endif /* ifndef PLAYER_HPP */
