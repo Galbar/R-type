@@ -21,6 +21,7 @@ void ActorFactory::build(const std::string& name, h2d::Actor& actor, const tiled
     {
         actor.game().destroy(&actor);
         h2d_log("Builder " << name << " not found. Not building.");
+        return;
     }
     it->second->construct(actor, object);
 }

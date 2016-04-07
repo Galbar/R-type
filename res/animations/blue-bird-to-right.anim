@@ -1,5 +1,5 @@
 # texture name
-birds
+birds.png
 # offset_x offset_y margin_x margin_y width height
 96 64 0 0 32 32
 # number of frames

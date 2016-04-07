@@ -1,13 +1,13 @@
 # resource_name resource_filename
 TEXTURES
-sprites sprites.png
-owl owl.png
-rabbit rabbit.png
-birds birds.png
-butterflies butterflies.png
-big-butterfly big-butterfly.png
-spider spider.png
-bee bee.png
+sprites.png
+owl.png
+rabbit.png
+birds.png
+butterflies.png
+big-butterfly.png
+spider.png
+bee.png
 
 ANIMATIONS
 player_anim player.anim

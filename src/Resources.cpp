@@ -67,9 +67,7 @@ void loadResources(mogl::MultimediaOGL& mogl, const std::string& resources_filen
 
         if (TYPE == "TEXTURES")
         {
-            std::string file;
-            ss >> file;
-            mogl.textures().load(word, "res/textures/" + file);
+            mogl.textures().load(word, "res/textures/" + word);
         }
         else if (TYPE == "ANIMATIONS")
         {

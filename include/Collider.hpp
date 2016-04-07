@@ -14,7 +14,7 @@ struct Collision
 class Collider : public h2d::Behavior
 {
 public:
-    enum class Type { Player, Enemy, PlayerBullet, EnemyBullet, Wall };
+    enum class Type { Player, PowerUpGun, PowerUpShield, Enemy, PlayerBullet, EnemyBullet, Wall };
     Collider(float width, float height, Type type);
     Collider(const sf::FloatRect& rect, Type type);
 

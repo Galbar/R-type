@@ -1,5 +1,5 @@
 # texture name
-rabbit
+rabbit.png
 # offset_x offset_y margin_x margin_y width height
 0 32 0 0 32 32
 # number of frames

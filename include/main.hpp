@@ -13,5 +13,6 @@
 #include "Rabbit.hpp"
 #include "Bee.hpp"
 #include "BigButterfly.hpp"
+#include "PlayButton.hpp"
 
 #endif /* ifndef MAIN_HPP */

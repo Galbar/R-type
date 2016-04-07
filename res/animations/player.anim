@@ -1,5 +1,5 @@
 # texture name
-sprites
+sprites.png
 # offset_x offset_y margin_x margin_y width height
 0 0 0 0 48 48
 # number of frames

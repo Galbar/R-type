@@ -7,7 +7,6 @@ void BeeBuilder::construct(h2d::Actor& actor, const tiled::Object& tmx_object)
 {
     auto collider = actor.addBehavior<Collider>(1, 1, Collider::Type::Enemy);
     auto kinematic = actor.addBehavior<h2d::Kinematic>();
-    actor.transform().z = 10;
     actor.transform().x = 20;
     actor.transform().y = 10;
     actor.addBehavior<Bee>(collider, kinematic);

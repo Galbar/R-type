@@ -3,6 +3,7 @@
 #include "Hum2D/Hum2D.hpp"
 #include "MOGL/MOGL.hpp"
 #include "tiled/tiled.hpp"
+#include "tiled/tiled.hpp"
 #include <unordered_set>
 #include <vector>
 #include "Collider.hpp"
@@ -28,18 +29,32 @@ public:
     void addCollider(Collider*);
     void removeCollider(Collider*);
 
+    const tiled::Map& getMap() const;
+    void changeLevel(const std::string& name);
+
 private:
     void updateActiveActors();
 
+    struct Scene
+    {
+        std::vector<std::string> textures;
+        std::vector<std::string> animations;
+        std::vector<h2d::Actor*> actors;
+    };
+
+    Scene* p_scene;
     h2d::Kinematic* p_camera_kinematic;
     mogl::MultimediaOGL* p_mogl;
     ActorFactory* p_factory;
+    bool p_change_level;
+    std::string p_next_level_name;
     float p_camera_speed;
-    std::unordered_set<h2d::Actor*> p_inactive_actors;
-    std::unordered_set<Collider*> p_player_collider;
-    std::unordered_set<Collider*> p_enemy_collider;
-    std::unordered_set<Collider*> p_player_bullet_collider;
-    std::unordered_set<Collider*> p_enemy_bullet_collider;
-    std::unordered_set<Collider*> p_wall_collider;
+    tiled::Map p_active_map;
+    std::unordered_set<h2d::Actor*>* p_inactive_actors;
+    std::unordered_set<Collider*>* p_player_collider;
+    std::unordered_set<Collider*>* p_enemy_collider;
+    std::unordered_set<Collider*>* p_player_bullet_collider;
+    std::unordered_set<Collider*>* p_enemy_bullet_collider;
+    std::unordered_set<Collider*>* p_wall_collider;
 };
 #endif /* ifndef GAME_PLUGIN_HPP */

@@ -29,3 +29,8 @@ void Bullet::fixedUpdate()
     p_kinematic->velocity().x = p_game_pl->getCameraSpeed() + p_vel_x;
     p_kinematic->velocity().y = p_vel_y;
 }
+
+void Bullet::onDestroy()
+{
+    h2d_log("onDestroy");
+}

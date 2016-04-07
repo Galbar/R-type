@@ -12,6 +12,7 @@ public:
     Bullet(Collider* collider, h2d::Kinematic* kinematic, float vel_x, float vel_y);
     void init() override;
     void fixedUpdate() override;
+    void onDestroy() override;
 
 private:
     Collider* p_collider;

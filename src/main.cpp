@@ -13,6 +13,7 @@ int main(void)
     factory.set<BirdBuilder>("Bird");
     factory.set<BeeBuilder>("Bee");
     factory.set<BigButterflyBuilder>("BigButterfly");
+    factory.set<PlayButtonBuilder>("PlayButton");
 
     sf::ContextSettings settings;
     settings.antialiasingLevel = 2;
@@ -29,7 +30,8 @@ int main(void)
 
     auto game_pl = game.addPlugin<GamePlugin>();
     game_pl->setActorFactory(factory);
-    game_pl->setCameraSpeed(1.5);
+    game_pl->setCameraSpeed(0);
+    game_pl->changeLevel("main-menu");
 
     game.run();
     return 0;

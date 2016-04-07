@@ -8,7 +8,6 @@ void PlayerBuilder::construct(h2d::Actor& actor, const tiled::Object& tmx_object
     auto sprite = actor.addBehavior<mogl::AnimatedSprite>(1, 1, mogl->spriteAnimations().get("butterfly-main.anim"));
     auto collider = actor.addBehavior<Collider>(1, 1, Collider::Type::Player);
     auto kinematic = actor.addBehavior<h2d::Kinematic>();
-    actor.transform().z = 10;
     actor.transform().x = 10;
     actor.transform().y = 10;
     actor.addBehavior<Player>(sprite, collider, kinematic);
