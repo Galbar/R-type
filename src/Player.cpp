@@ -184,5 +184,4 @@ void Player::shoot(float x, float y, float xx, float yy)
 
 void Player::onDestroy()
 {
-    h2d_log("Player muerto");
 }

@@ -48,5 +48,4 @@ void Bullet::fixedUpdate()
 
 void Bullet::onDestroy()
 {
-    h2d_log("onDestroy");
 }
