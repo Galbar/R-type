@@ -12,7 +12,9 @@ p_vel_y(vel_y)
 void Bullet::init()
 {
     p_game_pl = actor().game().getPlugin<GamePlugin>();
+    auto mogl = actor().game().getPlugin<mogl::MultimediaOGL>();
     p_collider->setRect(sf::FloatRect(0.25, 0, 0.5, 0.5));
+    mogl->sounds().play("shoot", 50, false);
 }
 
 void Bullet::fixedUpdate()
@@ -27,6 +29,8 @@ void Bullet::fixedUpdate()
         }
         if (p_collider->getType() == Collider::Type::PlayerBullet && collision.other->getType() == Collider::Type::Enemy)
         {
+            auto mogl = actor().game().getPlugin<mogl::MultimediaOGL>();
+            mogl->sounds().play("success", 50, false);
             actor().game().destroy(actor());
             return;
         }

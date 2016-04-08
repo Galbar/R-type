@@ -34,7 +34,7 @@ void PowerUpBuilder::construct(h2d::Actor& actor, const tiled::Object& object)
         if (type.getString() == "gun")
         {
             actor.addBehavior<Collider>(1, 1, Collider::Type::PowerUpGun);
-            actor.addBehavior<mogl::AnimatedSprite>(1, 1, mogl->spriteAnimations().get("butterfly-shoot"));
+            actor.addBehavior<mogl::AnimatedSprite>(1, 1, mogl->spriteAnimations().get("butterfly-shield"));
         }
         else if (type.getString() == "shield")
         {

@@ -33,7 +33,7 @@ int main(void)
     auto game_pl = game.addPlugin<GamePlugin>();
     game_pl->setActorFactory(factory);
     game_pl->setCameraSpeed(1);
-    game_pl->changeLevel("level2");
+    game_pl->changeLevel("main-menu");
 
     game.run();
     return 0;

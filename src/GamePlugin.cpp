@@ -41,6 +41,8 @@ void GamePlugin::gameStart()
     p_mogl = game().getPlugin<mogl::MultimediaOGL>();
 
     loadResources(*p_mogl, "./res/resources.def");
+
+    p_mogl->music().get("music")->play();
 }
 
 void GamePlugin::gameEnd()
@@ -313,7 +315,7 @@ void GamePlugin::removeActor(h2d::Actor* actor)
 
 void GamePlugin::updateActiveActors()
 {
-    float max = p_mogl->getCamera().getPosition().x + ORTHO_WIDTH + 3;
+    float max = p_mogl->getCamera().getPosition().x + ORTHO_WIDTH ;
 
     for (h2d::Actor* actor : *p_actors)
     {

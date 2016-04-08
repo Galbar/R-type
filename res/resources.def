@@ -32,5 +32,8 @@ big-butterfly-left big-butterfly-left.anim
 big-butterfly-right big-butterfly-right.anim
 
 SOUNDS
+shoot shoot.ogg
+success success.ogg
 
 MUSIC
+music music.ogg

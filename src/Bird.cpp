@@ -9,9 +9,6 @@ void BirdBuilder::construct(h2d::Actor& actor, const tiled::Object& tmx_object)
     auto sprite = actor.addBehavior<mogl::AnimatedSprite>(1, 1, mogl->spriteAnimations().get("red-bird-to-left"));
     auto collider = actor.addBehavior<Collider>(1, 1, Collider::Type::Enemy);
     auto kinematic = actor.addBehavior<h2d::Kinematic>();
-    actor.transform().z = 10;
-    actor.transform().x = 25;
-    actor.transform().y = 10;
     actor.addBehavior<Bird>(collider, kinematic);
 }
 
