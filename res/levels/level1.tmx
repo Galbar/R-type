@@ -142,17 +142,17 @@
     <property name="shooter" value="true"/>
    </properties>
   </object>
-  <object id="20" type="PowerUp" x="384" y="302">
+  <object id="20" type="PowerUp" x="364" y="266">
    <properties>
     <property name="type" value="gun"/>
    </properties>
   </object>
-  <object id="21" type="PowerUp" x="1010" y="452">
+  <object id="21" type="PowerUp" x="1004" y="426">
    <properties>
     <property name="type" value="shield"/>
    </properties>
   </object>
-  <object id="22" type="PowerUp" x="1590" y="595" width="14.25" height="14.125">
+  <object id="22" type="PowerUp" x="1482" y="609" width="14.25" height="14.125">
    <properties>
     <property name="type" value="gun"/>
    </properties>

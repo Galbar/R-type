@@ -7,7 +7,7 @@ return {
   height = 9,
   tilewidth = 80,
   tileheight = 80,
-  nextobjectid = 22,
+  nextobjectid = 28,
   properties = {
     ["camera_speed"] = "1"
   },
@@ -374,6 +374,96 @@ return {
           rotation = 0,
           visible = true,
           properties = {}
+        },
+        {
+          id = 22,
+          name = "",
+          type = "PowerUp",
+          shape = "rectangle",
+          x = 229.239,
+          y = 465.665,
+          width = 14.25,
+          height = 14.125,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["type"] = "gun"
+          }
+        },
+        {
+          id = 23,
+          name = "",
+          type = "PowerUp",
+          shape = "rectangle",
+          x = 883.784,
+          y = 602.028,
+          width = 14.25,
+          height = 14.125,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["type"] = "gun"
+          }
+        },
+        {
+          id = 24,
+          name = "",
+          type = "PowerUp",
+          shape = "rectangle",
+          x = 1338.33,
+          y = 468.695,
+          width = 14.25,
+          height = 14.125,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["type"] = "gun"
+          }
+        },
+        {
+          id = 25,
+          name = "",
+          type = "PowerUp",
+          shape = "rectangle",
+          x = 1665.6,
+          y = 605.059,
+          width = 14.25,
+          height = 14.125,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["type"] = "gun"
+          }
+        },
+        {
+          id = 26,
+          name = "",
+          type = "PowerUp",
+          shape = "rectangle",
+          x = 706.061,
+          y = 475.758,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["type"] = "shield"
+          }
+        },
+        {
+          id = 27,
+          name = "",
+          type = "PowerUp",
+          shape = "rectangle",
+          x = 1051.52,
+          y = 615.152,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["type"] = "shield"
+          }
         }
       }
     }
